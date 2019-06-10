@@ -1,18 +1,12 @@
-using Amazon;
-using Amazon.Runtime;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Polly;
-using Polly.Extensions.Http;
 using System;
-using System.Net.Http;
-using Unians.Web.Amazon;
-using Unians.Web.Clients;
-using Unians.Web.Interfaces;
+using Unians.Web.Amazon.Extensions;
+using Unians.Web.Clients.Extensions;
 using Unians.Web.Services;
 
 namespace Unians.Web
@@ -31,9 +25,11 @@ namespace Unians.Web
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            ConfigureAws(services);
+            services.AddTransient<ExerciseBucketFileUploadService>();
 
-            ConfigureClients(services);
+            services.AddAwsCredentials();
+
+            services.AddHttpClients(Configuration);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -80,46 +76,6 @@ namespace Unians.Web
             //        spa.UseReactDevelopmentServer(npmScript: "start");
             //    }
             //});
-        }
-
-        public void ConfigureAws(IServiceCollection services)
-        {
-            var accessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY");
-            var secretKey = Environment.GetEnvironmentVariable("AWS_SECRET_KEY");
-
-            var region = RegionEndpoint.USEast2;
-
-            var credentials = new BasicAWSCredentials(accessKey, secretKey);
-
-            var amazonConfig = new AmazonConfig(credentials, region);
-
-            services.AddSingleton(amazonConfig);
-
-            services.AddTransient<ExerciseBucketFileUploadService>();
-        }
-
-        public void ConfigureClients(IServiceCollection services)
-        {
-            services.AddHttpClient<IExerciseApiClient, ExerciseApiClient>()
-                .AddPolicyHandler(GetRetryPolicy)
-                .AddPolicyHandler(GetCircuitBreakerPatternPolicy);
-        }
-
-        private IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(HttpRequestMessage arg)
-        {
-            return HttpPolicyExtensions.HandleTransientHttpError()
-                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
-                .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
-        }
-
-        private IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPatternPolicy(HttpRequestMessage arg)
-        {
-            var section = Configuration.GetSection("CircuitBreaker");
-            var breakTime = section.GetValue<int>("BreakTime");
-            var retries = section.GetValue<int>("RetriesBeforeBreak");
-
-            return HttpPolicyExtensions.HandleTransientHttpError()
-                .CircuitBreakerAsync(retries, TimeSpan.FromSeconds(breakTime));
         }
     }
 }

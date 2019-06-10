@@ -11,11 +11,11 @@ using Unians.Web.ViewModels.Account;
 
 namespace Unians.Web.Clients
 {
-    public class AccountApiClient : BaseHttpClient, IAccountsApiClient
+    public class AccountsApiClient : BaseHttpClient, IAccountsApiClient
     {
         private readonly IMapper _mapper;
 
-        public AccountApiClient(IMapper mapper,
+        public AccountsApiClient(IMapper mapper,
                                 IConfiguration configuration, 
                                 HttpClient client) : base("Accounts", configuration, client)
         {
