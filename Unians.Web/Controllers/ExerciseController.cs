@@ -2,6 +2,7 @@
 using BaseRepositories.Models.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -20,26 +21,31 @@ namespace Unians.Web.Controllers
     {
         private IFileUploadService _fileUploader;
         private IExerciseApiClient _exerciseApiClient;
+        private IConfiguration _configuration;
 
         public ExerciseController(ExerciseBucketFileUploadService fileUploader,
-                                  IExerciseApiClient exerciseApiClient)
+                                  IExerciseApiClient exerciseApiClient,
+                                  IConfiguration configuration)
         {
             _fileUploader = fileUploader;
             _exerciseApiClient = exerciseApiClient;
+            _configuration = configuration;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] MultipartFormDataRequest requestData)
+        public async Task<ActionResult<CreateExerciseViewModel>> Create([FromForm] MultipartFormDataRequest requestData)
         {
             var model = JsonConvert.DeserializeObject<CreateExerciseViewModel>(requestData.Body);
 
             var failedFileUploadStatusCode = StatusCode(500, "Failed to upload image");
 
+            UploadFileResponse uploadFileResponse;
+
             try
             {
-                var uploadResponse = await UploadFormFile(requestData.File);
+                uploadFileResponse = await UploadFormFile(requestData.File);
 
-                if (!uploadResponse.IsSucceeded)
+                if (!uploadFileResponse.IsSucceeded)
                 {
                     return failedFileUploadStatusCode;
                 }
@@ -54,20 +60,23 @@ namespace Unians.Web.Controllers
             
             try
             {
-                var id = await _exerciseApiClient.CreateExercise(model);
+                model = await _exerciseApiClient.CreateExercise(model);
 
-                if(id == null)
+                if(model == null)
                 {
                     return failedDbTransactionStatusCode;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return failedDbTransactionStatusCode;
             }
 
-            return StatusCode(200, "Exercise created successfully");
-;
+            var cloudFrontDomain = _configuration["Exercise:CloudFrontDomain"];
+
+            model.FilePath = Path.Combine(cloudFrontDomain, uploadFileResponse.FilePath);
+
+            return StatusCode(200, model);
         }
 
         private async Task<UploadFileResponse> UploadFormFile(IFormFile file)

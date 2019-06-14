@@ -6,6 +6,6 @@ namespace Unians.Web.Interfaces
 {
     public interface IExerciseApiClient
     {
-        Task<string> CreateExercise(CreateExerciseViewModel exerciseViewModel);
+        Task<CreateExerciseViewModel> CreateExercise(CreateExerciseViewModel exerciseViewModel);
     }
 }

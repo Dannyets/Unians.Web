@@ -11,7 +11,7 @@ namespace Unians.Web.Clients
 {
     public class BaseHttpClient : IBaseHttpClient
     {
-        private readonly string _baseUrl;
+        protected string _baseUrl;
         private readonly HttpClient _client;
 
         public BaseHttpClient(string apiName, 
@@ -19,6 +19,11 @@ namespace Unians.Web.Clients
                               HttpClient client)
         {
             _baseUrl = configuration[$"{apiName}:BaseUrl"];
+            _client = client;
+        }
+
+        public BaseHttpClient(HttpClient client)
+        {
             _client = client;
         }
 
@@ -130,6 +135,7 @@ namespace Unians.Web.Clients
 
         private string GetFullUrl(string controllerName, string actionName, string queryString)
         {
+            //TODO: MOVE THIS API V1 TO PARAMETER OR CONFIGURATION
             var url = $"{_baseUrl}/{controllerName}/{actionName}";
 
             if (string.IsNullOrEmpty(queryString))

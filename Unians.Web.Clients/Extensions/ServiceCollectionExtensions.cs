@@ -1,9 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Amazon.ServiceDiscovery;
+using Amazon.ServiceDiscovery.Model;
+using De.Amazon.Configuration.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Extensions.Http;
 using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Unians.Web.Clients.Interfaces;
 using Unians.Web.Interfaces;
 

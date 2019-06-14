@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>De.Amazon.Configuration</PackageId>
+    <Authors>Danny Etsebban</Authors>
+    <Company>None</Company>
+    <Product>General</Product>
+    <Description>Helper for configuring AWS credentials and region in .net</Description>
   </PropertyGroup>
 
   <ItemGroup>

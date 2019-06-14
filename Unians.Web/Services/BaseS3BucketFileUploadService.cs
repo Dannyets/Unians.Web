@@ -6,16 +6,16 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using System.Net;
 using Unians.Web.Interfaces;
-using Unians.Web.Amazon;
+using De.Amazon.Configuration.Models;
 
 namespace Unians.Web.Services
 {
     public abstract class BaseS3BucketFileUploadService : IFileUploadService
     {
-        private readonly AmazonConfig _amazonConfig;
+        private readonly AmazonConfiguration _amazonConfig;
         protected readonly IConfiguration _configuration;
 
-        public BaseS3BucketFileUploadService(AmazonConfig amazonConfig, IConfiguration configuration)
+        public BaseS3BucketFileUploadService(AmazonConfiguration amazonConfig, IConfiguration configuration)
         {
             _amazonConfig = amazonConfig;
             _configuration = configuration;
