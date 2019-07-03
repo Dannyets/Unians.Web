@@ -18,7 +18,7 @@ namespace Unians.Web.Clients
                               IConfiguration configuration,
                               HttpClient client)
         {
-            _baseUrl = configuration[$"{apiName}:BaseUrl"];
+            _baseUrl = configuration[$"Apis:{apiName}:BaseUrl"];
             _client = client;
         }
 
@@ -27,34 +27,48 @@ namespace Unians.Web.Clients
             _client = client;
         }
 
-        public async Task<T> Post<T>(string controllerName, string actionName, string queryString = null, object body = null)
+        public async Task<T> Get<T>(string route, string queryString = null)
         {
-            var response = await Request(RequestType.Post, controllerName, actionName, queryString, body);
+            var response = await Request(RequestType.Get, route, queryString);
 
             return await HandleResponse<T>(response);
         }
 
-        public async Task Post(string controllerName, string actionName, string queryString = null, object body = null)
+        public async Task<T> Post<T>(string route, string queryString = null, object body = null)
         {
-            var response = await Request(RequestType.Post, controllerName, actionName, queryString, body);
+            var response = await Request(RequestType.Post, route, queryString, body);
+
+            return await HandleResponse<T>(response);
+        }
+
+        public async Task Post(string route, string queryString = null, object body = null)
+        {
+            var response = await Request(RequestType.Post, route, queryString, body);
 
             await HandleResponse(response);
         }
 
-        public async Task Put(string controllerName, string actionName, string queryString = null, object body = null)
+        public async Task Put(string route, string queryString = null, object body = null)
         {
-            var response = await Request(RequestType.Put, controllerName, actionName, queryString, body);
+            var response = await Request(RequestType.Put, route, queryString, body);
 
             await HandleResponse(response);
         }
+
+        public async Task Delete(string route, string queryString = null, object body = null)
+        {
+            var response = await Request(RequestType.Delete, route, queryString, body);
+
+            await HandleResponse(response);
+        }
+
 
         private async Task<HttpResponseMessage> Request(RequestType requestType, 
-                                                        string controllerName, 
-                                                        string actionName, 
+                                                        string route, 
                                                         string queryString = null, 
                                                         object body = null)
         {
-            var fullUrl = GetFullUrl(controllerName, actionName, queryString);
+            var fullUrl = GetFullUrl(route, queryString);
 
             var jsonBody = SerializeBody(body);
 
@@ -133,10 +147,9 @@ namespace Unians.Web.Clients
             throw new Exception(reason);
         }
 
-        private string GetFullUrl(string controllerName, string actionName, string queryString)
+        private string GetFullUrl(string route, string queryString)
         {
-            //TODO: MOVE THIS API V1 TO PARAMETER OR CONFIGURATION
-            var url = $"{_baseUrl}/{controllerName}/{actionName}";
+            var url = $"{_baseUrl}/{route}";
 
             if (string.IsNullOrEmpty(queryString))
             {

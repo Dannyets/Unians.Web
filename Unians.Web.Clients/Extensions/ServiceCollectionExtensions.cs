@@ -17,11 +17,7 @@ namespace Unians.Web.Clients.Extensions
     {
         public static void AddHttpClients(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddHttpClient<IExerciseApiClient, ExerciseApiClient>()
-                .AddPolicyHandler(GetRetryPolicy)
-                .AddPolicyHandler(arg => GetCircuitBreakerPatternPolicy(arg, configuration));
-
-            services.AddHttpClient<IAccountsApiClient, AccountsApiClient>()
+            services.AddHttpClient<IUniversityApiClient, UniversityApiClient>()
                 .AddPolicyHandler(GetRetryPolicy)
                 .AddPolicyHandler(arg => GetCircuitBreakerPatternPolicy(arg, configuration));
         }

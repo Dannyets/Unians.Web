@@ -4,10 +4,14 @@ namespace Unians.Web.Interfaces
 {
     public interface IBaseHttpClient
     {
-        Task<T> Post<T>(string controllerName, string actionName, string queryString = null, object body = null);
+        Task<T> Get<T>(string route, string queryString = null);
 
-        Task Post(string controllerName, string actionName, string queryString = null, object body = null);
+        Task<T> Post<T>(string route, string queryString = null, object body = null);
 
-        Task Put(string controllerName, string actionName, string queryString = null, object body = null);
+        Task Post(string route, string queryString = null, object body = null);
+
+        Task Put(string route, string queryString = null, object body = null);
+
+        Task Delete(string route, string queryString = null, object body = null);
     }
 }
