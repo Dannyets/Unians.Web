@@ -11,7 +11,7 @@ namespace Unians.Web.Api.GraphQL.Data.Schemes
     {
         public UniversityScheme(IDependencyResolver dependencyResolver) : base(dependencyResolver)
         {
-            Query = dependencyResolver.Resolve<UniversitiesQuery>();
+            Query = dependencyResolver.Resolve<UniversityQuery>();
         }
     }
 }

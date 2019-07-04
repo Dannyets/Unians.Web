@@ -28,11 +28,11 @@ namespace Unians.Web.Clients
             throw new NotImplementedException();
         }
 
-        public async Task<List<ApiUniversity>> GetUniversityByIdAsync(int id)
+        public async Task<ApiUniversity> GetUniversityByIdAsync(int id)
         {
             var route = $"api/University/Get/{id}";
 
-            return await Get<List<ApiUniversity>>(route);
+            return await Get<ApiUniversity>(route);
         }
     }
 }

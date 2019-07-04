@@ -12,6 +12,6 @@ namespace Unians.Web.Clients.Interfaces
 
         Task<List<ApiUniversity>> GetUniversitiesByIdsAsync(List<int> ids);
 
-        Task<List<ApiUniversity>> GetUniversityByIdAsync(int id);
+        Task<ApiUniversity> GetUniversityByIdAsync(int id);
     }
 }

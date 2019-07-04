@@ -20,7 +20,7 @@
     "Unians.Web.Api": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "graphql",
+      "launchUrl": "ui/playground",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
@@ -29,7 +29,7 @@
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/graphql",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/ui/playground",
       "environmentVariables": {},
       "httpPort": 61224
     }

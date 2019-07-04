@@ -1,5 +1,6 @@
 ﻿using GraphQL;
 using GraphQL.Http;
+using GraphQL.Server;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -13,15 +14,18 @@ namespace Unians.Web.Api.GraphQL.Data.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddGraphQL(this IServiceCollection services)
+        public static void AddGraphQLDependencies(this IServiceCollection services)
         {
             services.AddSingleton<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
 
-            services.AddSingleton<UniversitiesQuery>();
+            services.AddSingleton<UniversityQuery>();
             services.AddSingleton<UniversityType>();
+            services.AddSingleton<FacultyType>();
             services.AddSingleton<ISchema, UniversityScheme>();
+
+            services.AddGraphQL();
         }
     }
 }

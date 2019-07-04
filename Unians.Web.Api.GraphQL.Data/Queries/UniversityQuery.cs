@@ -5,11 +5,11 @@ using Unians.Web.Clients.Interfaces;
 
 namespace Unians.Web.Api.GraphQL.Data.Queries
 {
-    public class UniversitiesQuery : ObjectGraphType<object>
+    public class UniversityQuery : ObjectGraphType<object>
     {
-        public UniversitiesQuery(IUniversityApiClient client)
+        public UniversityQuery(IUniversityApiClient client)
         {
-            Name = "Universities";
+            Name = "UniversityQuery";
 
             Field<UniversityType>(
                 "university", 
@@ -23,13 +23,7 @@ namespace Unians.Web.Api.GraphQL.Data.Queries
 
             Field<ListGraphType<UniversityType>>(
                 "universities",
-                resolve: context => {
-                    //var ids = context.GetArgument<List<int>>("ids");
-
-                    //return client.GetUniversitiesByIdsAsync(ids).Result;
-
-                    return client.GetUniversitiesAsync().Result;
-                }
+                resolve: context => client.GetUniversitiesAsync().Result
             );
         }
     }

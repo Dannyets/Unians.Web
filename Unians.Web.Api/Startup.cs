@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
-using De.Amazon.Configuration.Extensions;
 using Unians.Web.Clients.Extensions;
 using Microsoft.AspNetCore.Http;
 using Unians.Web.Api.GraphQL.Data.Extensions;
-using GraphiQl;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
+using GraphQL.Types;
 
 namespace Unians.Web.Api
 {
@@ -37,7 +33,7 @@ namespace Unians.Web.Api
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddGraphQL();
+            services.AddGraphQLDependencies();
 
             services.AddSwaggerGen(options =>
             {
@@ -73,7 +69,14 @@ namespace Unians.Web.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Exercise Web Api");
             });
 
-            app.UseGraphiQl("/graphql");
+            // add http for Schema at default url /graphql
+            app.UseGraphQL<ISchema>("/graphql");
+
+            // use graphql-playground at default url /ui/playground
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
+            {
+                Path = "/ui/playground"
+            });
 
             app.UseMvc();
         }
