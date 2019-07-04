@@ -7,9 +7,9 @@ using Unians.Web.Api.GraphQL.Data.Queries;
 
 namespace Unians.Web.Api.GraphQL.Data.Schemes
 {
-    public class UniversityScheme : Schema
+    public class UniversitySchema : Schema
     {
-        public UniversityScheme(IDependencyResolver dependencyResolver) : base(dependencyResolver)
+        public UniversitySchema(IDependencyResolver dependencyResolver) : base(dependencyResolver)
         {
             Query = dependencyResolver.Resolve<UniversityQuery>();
         }

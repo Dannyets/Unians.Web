@@ -23,9 +23,17 @@ namespace Unians.Web.Api.GraphQL.Data.Extensions
             services.AddSingleton<UniversityQuery>();
             services.AddSingleton<UniversityType>();
             services.AddSingleton<FacultyType>();
-            services.AddSingleton<ISchema, UniversityScheme>();
+            services.AddSingleton<ISchema, UniversitySchema>();
 
-            services.AddGraphQL();
+            var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+
+            services
+                .AddGraphQL(options =>
+                {
+                    options.EnableMetrics = true;
+                    options.ExposeExceptions = isDevelopment;
+                })
+                .AddDataLoader();
         }
     }
 }

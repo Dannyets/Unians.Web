@@ -12,6 +12,7 @@ using Unians.Web.Api.GraphQL.Data.Extensions;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using GraphQL.Types;
+using Unians.Web.Api.GraphQL.Data.Schemes;
 
 namespace Unians.Web.Api
 {
@@ -51,7 +52,14 @@ namespace Unians.Web.Api
                 options.SwaggerDoc("v1", info);
             });
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,10 +74,12 @@ namespace Unians.Web.Api
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Exercise Web Api");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Unians Web Api");
             });
 
-            // add http for Schema at default url /graphql
+            app.UseCors("CorsPolicy");
+
+            // use HTTP middleware for schema at path /graphql
             app.UseGraphQL<ISchema>("/graphql");
 
             // use graphql-playground at default url /ui/playground
@@ -77,6 +87,7 @@ namespace Unians.Web.Api
             {
                 Path = "/ui/playground"
             });
+
 
             app.UseMvc();
         }
