@@ -27,6 +27,7 @@ namespace Unians.Web.Api.GraphQL.Data.Extensions
             services.AddSingleton<UniversityType>();
             services.AddSingleton<FacultyType>();
             services.AddSingleton<CourseType>();
+            services.AddSingleton<SemesterType>();
 
             //ADD SCHEMAS
             services.AddSingleton<ISchema, UniversitySchema>();

@@ -16,6 +16,7 @@
     <PackageReference Include="Unians.Course.Api.Data" Version="1.0.0" />
     <PackageReference Include="Unians.Exercise.Api.Models" Version="2.0.0" />
     <PackageReference Include="Unians.Faculty.Api.Data" Version="1.0.0" />
+    <PackageReference Include="Unians.Semester.Api.Data" Version="1.2.0" />
     <PackageReference Include="Unians.University.Api.Data" Version="1.0.0" />
   </ItemGroup>
 

@@ -6,7 +6,8 @@ namespace Unians.Web.Api.GraphQL.Data.Types
 {
     public class UniversityType : ObjectGraphType<ApiUniversity>
     {
-        public UniversityType(IFacultyApiClient facultyApiClient)
+        public UniversityType(IFacultyApiClient facultyApiClient, 
+                              ISemesterApiClient semesterApiClient)
         {
             Name = "University";
 
@@ -31,6 +32,27 @@ namespace Unians.Web.Api.GraphQL.Data.Types
                     var universityId = context.GetArgument<int>("universityId");
 
                     return facultyApiClient.GetFacultiesForUniversity(universityId).Result;
+                }
+            );
+
+            Field<SemesterType>(
+                "semester",
+                arguments: new QueryArguments(new QueryArgument<IdGraphType> { Name = "id", Description = "id of semester" }),
+                resolve: context => {
+                    var id = context.GetArgument<int>("id");
+
+                    return semesterApiClient.GetSemester(id).Result;
+                }
+            );
+
+            Field<ListGraphType<SemesterType>>(
+                "semesters",
+                arguments: new QueryArguments(new QueryArgument<IdGraphType> { Name = "universityId", Description = "id of university" }),
+                resolve: context =>
+                {
+                    var universityId = context.GetArgument<int>("universityId");
+
+                    return semesterApiClient.GetSemestersForUniversity(universityId).Result;
                 }
             );
         }

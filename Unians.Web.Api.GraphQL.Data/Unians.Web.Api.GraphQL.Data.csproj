@@ -8,6 +8,7 @@
     <PackageReference Include="GraphQL" Version="2.4.0" />
     <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="3.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Unians.Semester.Api.Data" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
