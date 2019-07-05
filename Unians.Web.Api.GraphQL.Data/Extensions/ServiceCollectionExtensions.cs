@@ -20,15 +20,20 @@ namespace Unians.Web.Api.GraphQL.Data.Extensions
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
 
+            //ADD QUERIES
             services.AddSingleton<UniversityQuery>();
+
+            //ADD TYPES
             services.AddSingleton<UniversityType>();
             services.AddSingleton<FacultyType>();
+            services.AddSingleton<CourseType>();
+
+            //ADD SCHEMAS
             services.AddSingleton<ISchema, UniversitySchema>();
 
             var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
-            services
-                .AddGraphQL(options =>
+            services.AddGraphQL(options =>
                 {
                     options.EnableMetrics = true;
                     options.ExposeExceptions = isDevelopment;

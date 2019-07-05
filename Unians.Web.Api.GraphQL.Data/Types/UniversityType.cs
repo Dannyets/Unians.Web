@@ -16,7 +16,11 @@ namespace Unians.Web.Api.GraphQL.Data.Types
             Field<FacultyType>(
                 "faculty",
                 arguments: new QueryArguments(new QueryArgument<IdGraphType> { Name = "id", Description = "id of faculty" }),
-                resolve: context => facultyApiClient.GetFaculty(1).Result
+                resolve: context => {
+                    var id = context.GetArgument<int>("id");
+
+                    return facultyApiClient.GetFaculty(id).Result;
+                }
             );
 
             Field<ListGraphType<FacultyType>>(
