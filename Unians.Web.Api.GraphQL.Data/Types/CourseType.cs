@@ -26,7 +26,7 @@ namespace Unians.Web.Api.GraphQL.Data.Types
                 ),
                 resolve: context =>
                 {
-                    var courseId = context.GetArgument<int>("coueseId");
+                    var courseId = context.GetArgument<int>("courseId");
                     var semesterId = context.GetArgument<int>("semesterId");
 
                     return exerciseApiClient.GetExercisesForCourseAndSemester(courseId, semesterId).Result;
