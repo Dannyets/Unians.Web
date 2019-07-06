@@ -3,12 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Unians.Course.Api.Data.Models;
+using Unians.Web.Clients.Interfaces;
 
 namespace Unians.Web.Api.GraphQL.Data.Types
 {
     public class CourseType : ObjectGraphType<ApiCourse>
     {
-        public CourseType()
+        public CourseType(IExerciseApiClient exerciseApiClient)
         {
             Name = "Course";
 
@@ -16,6 +17,21 @@ namespace Unians.Web.Api.GraphQL.Data.Types
             Field(u => u.CourseNumber).Description("Course number");
             Field(u => u.Name).Description("Name of course");
             Field(u => u.FacultyId).Description("Id of parent faculty");
+
+            Field<ListGraphType<CourseType>>(
+                "exercises",
+                arguments: new QueryArguments(
+                    new QueryArgument<IdGraphType> { Name = "coueseId", Description = "id of course" },
+                    new QueryArgument<IdGraphType> { Name = "semesterId", Description = "id of semester" }
+                ),
+                resolve: context =>
+                {
+                    var courseId = context.GetArgument<int>("coueseId");
+                    var semesterId = context.GetArgument<int>("semesterId");
+
+                    return exerciseApiClient.GetExercisesForCourseAndSemester(courseId, semesterId).Result;
+                }
+            );
         }
     }
 }

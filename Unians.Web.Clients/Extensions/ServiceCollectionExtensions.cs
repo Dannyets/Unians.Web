@@ -32,6 +32,10 @@ namespace Unians.Web.Clients.Extensions
             services.AddHttpClient<ISemesterApiClient, SemesterApiClient>()
                 .AddPolicyHandler(GetRetryPolicy)
                 .AddPolicyHandler(arg => GetCircuitBreakerPatternPolicy(arg, configuration));
+
+            services.AddHttpClient<IExerciseApiClient, ExerciseApiClient>()
+                .AddPolicyHandler(GetRetryPolicy)
+                .AddPolicyHandler(arg => GetCircuitBreakerPatternPolicy(arg, configuration));
         }
 
         private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(HttpRequestMessage arg)
