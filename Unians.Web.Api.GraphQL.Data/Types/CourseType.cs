@@ -18,10 +18,10 @@ namespace Unians.Web.Api.GraphQL.Data.Types
             Field(u => u.Name).Description("Name of course");
             Field(u => u.FacultyId).Description("Id of parent faculty");
 
-            Field<ListGraphType<CourseType>>(
+            Field<ListGraphType<ExerciseType>>(
                 "exercises",
                 arguments: new QueryArguments(
-                    new QueryArgument<IdGraphType> { Name = "coueseId", Description = "id of course" },
+                    new QueryArgument<IdGraphType> { Name = "courseId", Description = "id of course" },
                     new QueryArgument<IdGraphType> { Name = "semesterId", Description = "id of semester" }
                 ),
                 resolve: context =>
